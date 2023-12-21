@@ -1,6 +1,6 @@
 module.exports = {
   "env": {
-    "browser": true,
+    "node": true,
     "es6": true,
     "jest/globals": true
   },
@@ -8,6 +8,9 @@ module.exports = {
     "eslint:recommended",
     "plugin:react/recommended"
   ],
+  "globals": {
+    "globalThis": false,
+   },
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
