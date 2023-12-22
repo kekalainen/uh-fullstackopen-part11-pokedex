@@ -35,12 +35,29 @@ jobs:
           wait-on: http://localhost:5000
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy (Fly.io)
+        id: deploy
         if: >-
           ${{ github.event_name == 'push' &&
             !contains(join(github.event.commits.*.message, ' '), '#skip') }}
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: Discord webhook (deploy)
+        if: ${{ steps.deploy.outcome == 'success' }}
+        uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
+        with:
+            description: Commit [${{ github.event.head }}](https://github.com/${{ github.repository }}/commit/${{ github.event.head }}) built and deployed!
+            footer: Triggered by ${{ github.event.actor.login }}
+            severity: info
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - name: Discord webhook (failure)
+        uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
+        if: ${{ failure() }}
+        with:
+            description: Pipeline failed for commit [${{ github.event.head }}](https://github.com/${{ github.repository }}/commit/${{ github.event.head }}).
+            footer: Triggered by ${{ github.event.actor.login }}
+            severity: error
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
   tag_release:
     needs: [simple_deployment_pipeline]
     if: >-
