@@ -46,7 +46,7 @@ jobs:
         if: ${{ steps.deploy.outcome == 'success' }}
         uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
         with:
-            description: Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) built and deployed!
+            description: Commit [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) built and [deployed](${{ vars.DEPLOYMENT_URL }})!
             footer: Triggered by ${{ github.triggering_actor }}
             severity: info
             webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
