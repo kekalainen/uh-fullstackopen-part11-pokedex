@@ -10,6 +10,7 @@ primary_region = "ams"
 
 [deploy]
   strategy = "canary"
+  wait_timeout = "2m"
 
 [http_service]
   internal_port = 5000
