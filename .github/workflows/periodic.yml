@@ -1,8 +1,10 @@
 name: Periodic pipeline
 
 on:
-  schedule:
-    - cron: '33 * * * *'
+  #schedule:
+  #  - cron: '33 * * * *'
+  push:
+    branches: [main]
 
 jobs:
   health_check:
